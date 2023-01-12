@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  isDeleted Boolean  @default(false) @map("is_deleted") @db.TinyInt
+  name      String   @map("name") @db.VarChar(255)
+  email     String   @unique @map("email") @db.VarChar(255)
+  password  String   @map("password") @db.VarChar(255)
+  gender    Boolean  @default(true) @map("gender") @db.TinyInt
+  avatar    String?  @map("avatar")
+  created   DateTime @default(now()) @map("created")
+  updated   DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("user")
+}
+
+model Movies {
+  id          Int     @id @default(autoincrement())
+  name       String   @map("name") @db.VarChar(255)
+  categoryId Boolean  @default(true) @map("gender") @db.TinyInt
+  image      String?  @map("avatar")
+  created    DateTime @default(now()) @map("created")
+  updated    DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("movie")
+}
