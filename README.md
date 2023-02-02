@@ -1,77 +1,102 @@
-<<<<<<< HEAD
-# nestjs-api
-=======
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Config Auth0
+#### 1.  Tạo tài khoản Auth0  [https://auth0.com/](https://auth0.com/)
+#### 2. Đăng nhập vào trang quản trị  [https://manage.auth0.com/](https://manage.auth0.com/) (Application)  Single Page Web Applications
+- Mặc định Auth0 cho phép đăng nhập bằng `email + password`
+- Cho phép đăng nhập bằng `username + password`:
+	**[Dashboard](https://manage.auth0.com/dashboard/)**  -> chọn   `Authentication` -> chọn `Database`
+	Chọn DB setting -> bật flag `Requires Username` 
+-   Tạo tài khoản cho user: 
+	**[Dashboard](https://manage.auth0.com/dashboard/)**  -> chọn   `User Management` -> chọn `Users` -> Chọn `+ Create User` -> Nhập thông tin user: email, password, username và Database Connections
+-   Custom login Form:
+	 **[Dashboard](https://manage.auth0.com/dashboard/)**  -> chọn   `Branding` -> chọn `Universal Login`
+	-  Customization Options: Tuỳ chỉnh colors, fonts, border...
+	-  Advanced Options: Tuỳ chỉnh, ghi đè HTML ...
+	
+#### 3. Config nuxt
+-  `yarn add @auth0/auth0-vue` or `npm install @auth0/auth0-vue`
+- Tạo plugins: 
+	Tạo file `auth0.ts`
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+   ```
+   plugins/
+     |- auth0.ts
+     ```
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+	```typescript
+	    import { createAuth0 } from  '@auth0/auth0-vue'
+	    export  default  defineNuxtPlugin((nuxtApp) => {
+		    	nuxtApp.vueApp.use(
+		    	createAuth0({
+		    	domain:  'your-domain-auth0',
+		    	clientId:  'your-clientID',
+		    	authorizationParams: {
+		    	redirect_uri:  window.location.origin
+		    	}
+		    }))
+	    })
+	```
+  - Lấy Domain, ClientId:
+**[Dashboard](https://manage.auth0.com/dashboard/)**  -> chọn   `Appllications` -> chọn `Appllications` -> chọn dự án cần làm -> chọn setting
 
-## Description
+-   Tạo login page
+	- Tạo file `auth0.ts`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+	   ```
+	   plugins/
+	     |- auth0.ts
+	     ```
+	     ```typescript
+	    <template>
+			<div>
+				<button @click="login">Log in</button>
+			</div>
+		</template>
+		<script>
+		import { useAuth0 } from  '@auth0/auth0-vue'
 
-## Installation
+		export  default {
+			setup() {
+				const auth0 = useAuth0()
+					return {
+						login() {
+							auth0.loginWithRedirect()
+						}
+					}
+				}
+		}
+		</script>
+		```
 
-```bash
-$ yarn install
-```
+-   Tạo login page
+	- Tạo file `auth0.ts`
 
-## Running the app
+	   ```
+	   plugins/
+	     |- auth0.ts
+	     ```
+	     ```typescript
+	    <template>
+			<div>
+				<button @click="login">Log in</button>
+			</div>
+		</template>
+		<script>
+		import { useAuth0 } from  '@auth0/auth0-vue'
 
-```bash
-# development
-$ yarn run start
+		export  default {
+			setup() {
+				const auth0 = useAuth0()
+					return {
+						logout() {
+							auth0.logout({
+								logoutParams: {
+									returnTo:  window.location.origin
+							}
+						})
+					}
+			}
+		}
+		</script>
+		```
 
-# watch mode
-$ yarn run start:dev
 
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
->>>>>>> e23c71e (:tada: first commit)
