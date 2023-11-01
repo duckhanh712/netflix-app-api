@@ -11,26 +11,91 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  isDeleted Boolean  @default(false) @map("is_deleted") @db.TinyInt
-  name      String   @map("name") @db.VarChar(255)
-  email     String   @unique @map("email") @db.VarChar(255)
-  password  String   @map("password") @db.VarChar(255)
-  gender    Boolean  @default(true) @map("gender") @db.TinyInt
-  avatar    String?  @map("avatar")
-  created   DateTime @default(now()) @map("created")
-  updated   DateTime @default(now()) @updatedAt @map("updated")
+  id       Int      @id @default(autoincrement())
+  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  name     String   @map("name") @db.VarChar(255)
+  role     String   @map("role") @db.VarChar(255)
+  email    String?  @unique @map("email") @db.VarChar(255)
+  password String   @map("password") @db.VarChar(255)
+  gender   Boolean  @default(true) @map("gender") @db.TinyInt
+  avatar   String?  @map("avatar")
+  created  DateTime @default(now()) @map("created")
+  updated  DateTime @default(now()) @updatedAt @map("updated")
 
   @@map("user")
 }
 
-model Movies {
-  id          Int     @id @default(autoincrement())
-  name       String   @map("name") @db.VarChar(255)
-  categoryId Boolean  @default(true) @map("gender") @db.TinyInt
-  image      String?  @map("avatar")
-  created    DateTime @default(now()) @map("created")
-  updated    DateTime @default(now()) @updatedAt @map("updated")
+model Product {
+  id          Int      @id @default(autoincrement())
+  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  name        String   @map("name") @db.VarChar(255)
+  type        Int      @map("type")
+  image       String?  @map("image") @db.VarChar(255)
+  execTime    Int?     @map("exec_time")
+  status      Int      @map("status")
+  price       Int      @map("price")
+  description String   @map("description") @db.Text
+  created     DateTime @default(now()) @map("created")
+  updated     DateTime @default(now()) @updatedAt @map("updated")
 
-  @@map("movie")
+  @@map("product")
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  no           Int      @map("no")
+  tableName    String   @map("table_name") @db.VarChar(255)
+  customerName String?  @map("customer_name") @db.VarChar(255)
+  status       Int      @map("status")
+  memo         String   @map("memo") @db.Text
+  created      DateTime @default(now()) @map("created")
+  updated      DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("order")
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  relatedId Int      @map("related_id")
+  orderId   Int      @map("order_id")
+  status    Int      @map("status")
+  type      Int      @map("type")
+  name      String   @map("name") @db.VarChar(255)
+  image     String?  @map("image") @db.VarChar(255)
+  price     Int      @map("price")
+  count     Int      @default(1) @map("count")
+  unit      String   @map("unit") @db.VarChar(255)
+  memo      String   @map("memo") @db.Text
+  created   DateTime @default(now()) @map("created")
+  updated   DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("order_item")
+}
+
+model Menu {
+  id          Int      @id @default(autoincrement())
+  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  name        String   @map("name") @db.VarChar(255)
+  image       String   @map("image") @db.VarChar(255)
+  status      Int      @map("status")
+  description String?  @map("description") @db.Text
+  created     DateTime @default(now()) @map("created")
+  updated     DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("menu")
+}
+
+model MenuItem {
+  id        Int      @id @default(autoincrement())
+  relatedId Int      @map("related_id")
+  menuId Int      @map("menu_id")
+  type      Int      @map("type")
+  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  memo      String   @map("memo") @db.Text
+  count     Int      @default(1) @map("count")
+  unit      String   @map("unit") @db.VarChar(255)
+  created   DateTime @default(now()) @map("created")
+  updated   DateTime @default(now()) @updatedAt @map("updated")
+
+  @@map("menu_item")
 }

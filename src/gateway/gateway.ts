@@ -5,7 +5,6 @@ import {
   MessageBody,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { log } from 'console';
 
 @WebSocketGateway()
 export class GatewayController {
