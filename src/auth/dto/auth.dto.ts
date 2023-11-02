@@ -13,4 +13,8 @@ export class AuthDTO {
     @IsString()
     @IsNotEmpty()
     name: string
+    isEnable: boolean
+    role: number
+    gender: boolean  
+    avatar: string
 }
