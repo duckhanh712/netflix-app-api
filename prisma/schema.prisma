@@ -14,7 +14,7 @@ model User {
   id       Int      @id @default(autoincrement())
   isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
   name     String   @map("name") @db.VarChar(255)
-  role     String   @map("role") @db.VarChar(255)
+  role     Int      @map("role")
   email    String?  @unique @map("email") @db.VarChar(255)
   password String   @map("password") @db.VarChar(255)
   gender   Boolean  @default(true) @map("gender") @db.TinyInt
@@ -27,7 +27,7 @@ model User {
 
 model Product {
   id          Int      @id @default(autoincrement())
-  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  isEnable    Boolean  @default(false) @map("is_enable") @db.TinyInt
   name        String   @map("name") @db.VarChar(255)
   type        Int      @map("type")
   image       String?  @map("image") @db.VarChar(255)
@@ -74,7 +74,7 @@ model OrderItem {
 
 model Menu {
   id          Int      @id @default(autoincrement())
-  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  isEnable    Boolean  @default(false) @map("is_enable") @db.TinyInt
   name        String   @map("name") @db.VarChar(255)
   image       String   @map("image") @db.VarChar(255)
   status      Int      @map("status")
@@ -88,9 +88,9 @@ model Menu {
 model MenuItem {
   id        Int      @id @default(autoincrement())
   relatedId Int      @map("related_id")
-  menuId Int      @map("menu_id")
+  menuId    Int      @map("menu_id")
   type      Int      @map("type")
-  isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
+  isEnable  Boolean  @default(false) @map("is_enable") @db.TinyInt
   memo      String   @map("memo") @db.Text
   count     Int      @default(1) @map("count")
   unit      String   @map("unit") @db.VarChar(255)
