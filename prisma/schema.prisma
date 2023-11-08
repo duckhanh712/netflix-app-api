@@ -14,6 +14,7 @@ model User {
   id       Int      @id @default(autoincrement())
   isEnable Boolean  @default(false) @map("is_enable") @db.TinyInt
   name     String   @map("name") @db.VarChar(255)
+  username String   @unique @map("username") @db.VarChar(255)
   role     Int      @map("role")
   email    String?  @unique @map("email") @db.VarChar(255)
   password String   @map("password") @db.VarChar(255)
@@ -42,14 +43,17 @@ model Product {
 }
 
 model Order {
-  id           Int      @id @default(autoincrement())
-  no           Int      @map("no")
-  tableName    String   @map("table_name") @db.VarChar(255)
-  customerName String?  @map("customer_name") @db.VarChar(255)
-  status       Int      @map("status")
-  memo         String   @map("memo") @db.Text
-  created      DateTime @default(now()) @map("created")
-  updated      DateTime @default(now()) @updatedAt @map("updated")
+  id           Int         @id @default(autoincrement())
+  no           Int         @map("no")
+  tableName    String      @map("table_name") @db.VarChar(255)
+  customerName String?     @map("customer_name") @db.VarChar(255)
+  status       Int         @map("status")
+  memo         String      @map("memo") @db.Text
+  discountId   Int?        @map("discount_id")
+  discount     Discount?   @relation(fields: [discountId], references: [id])
+  orderItems   OrderItem[]
+  created      DateTime    @default(now()) @map("created")
+  updated      DateTime    @default(now()) @updatedAt @map("updated")
 
   @@map("order")
 }
@@ -66,6 +70,7 @@ model OrderItem {
   count     Int      @default(1) @map("count")
   unit      String   @map("unit") @db.VarChar(255)
   memo      String   @map("memo") @db.Text
+  order     Order    @relation(fields: [orderId], references: [id])
   created   DateTime @default(now()) @map("created")
   updated   DateTime @default(now()) @updatedAt @map("updated")
 
@@ -98,4 +103,20 @@ model MenuItem {
   updated   DateTime @default(now()) @updatedAt @map("updated")
 
   @@map("menu_item")
+}
+
+model Discount {
+  id          Int      @id @default(autoincrement())
+  name        String   @map("name") @db.VarChar(255)
+  status      Int      @map("status")
+  description String   @map("description") @db.Text
+  startDate   DateTime @map("start_date") @db.Date
+  endDate     DateTime @map("end_date") @db.Date
+  value       Int      @map("value")
+  type        Int      @map("type")
+  created     DateTime @default(now()) @map("created")
+  updated     DateTime @default(now()) @updatedAt @map("updated")
+  Order       Order[]
+
+  @@map("discount")
 }

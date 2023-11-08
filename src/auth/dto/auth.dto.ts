@@ -3,7 +3,6 @@ import { IsEmail, IsNotEmpty, IsString } from "class-validator"
 export class AuthDTO {
 
     @IsEmail()
-    @IsNotEmpty()
     email: string;
 
     @IsString()
@@ -13,8 +12,13 @@ export class AuthDTO {
     @IsString()
     @IsNotEmpty()
     name: string
+
     isEnable: boolean
+
+    @IsNotEmpty()
     role: number
+
     gender: boolean  
+    
     avatar: string
 }
