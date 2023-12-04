@@ -5,6 +5,9 @@ export class AuthDTO {
     @IsEmail()
     email: string;
 
+    @IsNotEmpty()
+    username
+
     @IsString()
     @IsNotEmpty()
     password: string;

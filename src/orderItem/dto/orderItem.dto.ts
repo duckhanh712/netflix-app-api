@@ -15,8 +15,6 @@ export class OrderItemDTO {
   @IsInt()
   orderId
 
-  @IsNotEmpty()
-  @IsInt()
   status
 
   @IsNotEmpty()
@@ -39,7 +37,7 @@ export class OrderItemDTO {
   count
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   unit
 
   @IsNotEmpty()

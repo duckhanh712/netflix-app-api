@@ -44,13 +44,15 @@ model Product {
 
 model Order {
   id           Int         @id @default(autoincrement())
-  no           Int         @map("no")
+  no           Int?        @map("no")
   tableName    String      @map("table_name") @db.VarChar(255)
   customerName String?     @map("customer_name") @db.VarChar(255)
-  status       Int         @map("status")
+  status       Int         @default(0) @map("status")
   memo         String      @map("memo") @db.Text
   discountId   Int?        @map("discount_id")
   discount     Discount?   @relation(fields: [discountId], references: [id])
+  spaceId      Int?        @map("space_id")
+  space        Space?      @relation(fields: [spaceId], references: [id])
   orderItems   OrderItem[]
   created      DateTime    @default(now()) @map("created")
   updated      DateTime    @default(now()) @updatedAt @map("updated")
@@ -62,7 +64,7 @@ model OrderItem {
   id        Int      @id @default(autoincrement())
   relatedId Int      @map("related_id")
   orderId   Int      @map("order_id")
-  status    Int      @map("status")
+  status    Int      @default(0) @map("status")
   type      Int      @map("type")
   name      String   @map("name") @db.VarChar(255)
   image     String?  @map("image") @db.VarChar(255)
@@ -119,4 +121,18 @@ model Discount {
   Order       Order[]
 
   @@map("discount")
+}
+
+model Space {
+  id          Int      @id @default(autoincrement())
+  name        String   @map("name") @db.VarChar(255)
+  status      Int      @map("status")
+  description String   @map("description") @db.Text
+  value       Int      @map("value")
+  type        Int      @map("type")
+  created     DateTime @default(now()) @map("created")
+  updated     DateTime @default(now()) @updatedAt @map("updated")
+  Order       Order[]
+
+  @@map("space")
 }

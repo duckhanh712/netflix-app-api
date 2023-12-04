@@ -1,6 +1,6 @@
 {
   "name": "nestjs-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "author": "",
   "private": true,
@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "dcc": "docker-compose -f docker-compose.yaml",
+    "dc": "docker-compose -f docker-compose.yaml",
     "prisma:migrate": "yarn prisma migrate dev --schema=./prisma/schema.prisma",
     "prisma:generate": "yarn prisma generate dev --schema=./prisma/schema.prisma",
     "prisma:format": "yarn prisma format --schema=./prisma/schema.prisma"

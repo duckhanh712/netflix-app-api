@@ -1,48 +1,54 @@
-// import { HttpStatus, Injectable } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
-// // import { OrderService }
-// import { OrderItemDTO } from './dto';
-// import { handleResponse } from 'src/helpers';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { OrderItemDTO } from './dto';
+import { handleResponse } from 'src/helpers';
+import { OrderService } from 'src/order/order.service';
 
-// @Injectable({})
-// export class OrderItemService {
-//   constructor(private prisma: PrismaService) {}
+@Injectable({})
+export class OrderItemService {
+  constructor(private prisma: PrismaService, private Order: OrderService) {}
 
-//   getOrderItem(orderItemId: string) {
-//     return this.prisma.orderItem.findFirst({
-//       where: {
-//         id: +orderItemId,
-//       },
-//     });
-//   }
+  getOrderItem(orderItemId: string) {
+    return this.prisma.orderItem.findFirst({
+      where: {
+        id: +orderItemId,
+      },
+    });
+  }
 
-//   getOrderItems(params: any) {
-//     const { orderId } = params;
-//     let conditions = {};
+  getOrderItems(params: any) {
+    const { orderId } = params;
+    let conditions = {};
 
-//     if (orderId) {
-//       conditions = { ...conditions, orderId };
-//     }
+    if (orderId) {
+      conditions = { ...conditions, orderId };
+    }
 
-//     return this.prisma.orderItem.findMany({
-//       where: conditions,
-//     });
-//   }
+    return this.prisma.orderItem.findMany({
+      where: conditions,
+    });
+  }
 
-//   createOrderItem(orderItem: OrderItemDTO) {
-//     const { orderId } = orderItem;
-//     // const order = await OrderService.getOrder(orderId)
-//     if (true) return handleResponse(HttpStatus.NOT_FOUND);
+  async createOrderItem(orderItemData: OrderItemDTO) {
+    const { orderId } = orderItemData;
+    const order = await this.Order.getOrder(orderId);
+    if (!order)
+      return handleResponse(
+        HttpStatus.NOT_FOUND,
+        `order: ${orderId} Not found`,
+      );
 
-//     return this.prisma.orderItem.create({
-//       data: orderItem,
-//     });
-//   }
+    await this.prisma.orderItem.create({
+      data: orderItemData,
+    });
 
-//   updateOrderItem(orderItemId: number, orderItem: OrderItemDTO) {
-//     return this.prisma.orderItem.update({
-//       data: orderItem,
-//       where: { id: orderItemId },
-//     });
-//   }
-// }
+    return handleResponse(HttpStatus.OK);
+  }
+
+  updateOrderItem(orderItemId: number, orderItem: OrderItemDTO) {
+    return this.prisma.orderItem.update({
+      data: orderItem,
+      where: { id: orderItemId },
+    });
+  }
+}

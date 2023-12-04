@@ -18,7 +18,7 @@ export class GatewayController {
     });
   }
 
-  @SubscribeMessage('message')
+  @SubscribeMessage('newMessage')
   handleMessage(@MessageBody() message: any) {
     console.log(message);
     this.server.emit('onMessage', {

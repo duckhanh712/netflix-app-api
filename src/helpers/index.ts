@@ -1,16 +1,29 @@
-import { HttpCode, HttpStatus } from '@nestjs/common';
+import {HttpStatus } from '@nestjs/common';
 
-export const handleResponse = (code: number = 200, message: string = '') => {
-
-  if (!message && code == HttpStatus.NOT_FOUND) {
-    message = 'Not Found';
+export const handleResponse = (
+  statusCode: number = 200,
+  message: string = '',
+  data = null
+) => {
+  let error = '';
+  if (statusCode == HttpStatus.NOT_FOUND) {
+    error = 'Not Found';
   }
-  if (!message && code == HttpStatus.FORBIDDEN) {
-    message = 'Forbidden';
-  }
+  // if (!message && code == HttpStatus.FORBIDDEN) {
+  //   message = 'Forbidden';
+  // }
 
   return {
-    code,
-    message,
+    message: message ?  [ message ] : [ "succesfully" ],
+    statusCode,
+    ...(error ? { error } : {}),
+    ...(data ? { data } : {}),
   };
 };
+
+export interface Result {
+  statusCode: number
+  error?: string
+  message: string[]
+  data?: any
+}
