@@ -8,7 +8,7 @@ services:
       - ./mysql/.data:/var/lib/mysql
       - ./mysql/initdb:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_DATABASE: order
+      MYSQL_DATABASE: smart_order
       MYSQL_ROOT_PASSWORD: BIyai917L5G5nrHwnQYC1R5S3N8R3iEY
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default_authentication_plugin=mysql_native_password
     networks:
